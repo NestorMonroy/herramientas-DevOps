@@ -5,7 +5,6 @@ services:
   postgres_db:
     container_name: postgres
     image: postgres:latest
-    user: ${CURRENT_UID}
     restart: always
     ports:
       - 5432:5432
@@ -26,3 +25,31 @@ services:
       - postgres_db
     ports:
        - 9090:8080
+
+#Billin app backend service
+  billingapp-back:
+    build:
+      context: ./target
+      args:
+        - JAR_FILE=*.jar
+        - DB_PASSWORD=qwerty
+    container_name: billingApp-back      
+    environment:
+       - JAVA_OPTS=
+         -Xms256M 
+         -Xmx256M
+    depends_on:     
+      - postgres_db
+    ports:
+      - 8080:8080
+
+#Billin app frontend service
+  billingapp-front:
+    build:
+      context: ./dist 
+    container_name: billingApp-front
+    depends_on:
+      - billingapp-back
+#rango de puertos para escalar    
+    ports:
+      - 80:80

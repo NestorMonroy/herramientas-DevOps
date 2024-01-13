@@ -2,4 +2,4 @@
 
 docker stop $(docker ps -qa)
 docker system prune --all
-docker volume prune
+# docker volume prune
