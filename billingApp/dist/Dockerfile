@@ -10,7 +10,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY billingApp /usr/share/nginx/html
 COPY mime.types /etc/nginx/mime.types
 
-
 #The ports 80 for web app
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
