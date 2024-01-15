@@ -1,0 +1,3 @@
+[submodule "DockerVagrant/docker-compose/devilbox"]
+	path = DockerVagrant/docker-compose/devilbox
+	url = https://github.com/NestorMonroy/devilbox.git
