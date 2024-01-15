@@ -51,6 +51,45 @@ docker stats
 docker update -m 200M --memory-swap -l  nombre-contenedor
 
 # Para natear puertos y llegar a los servicios de los contenedores
-docker run -dtiP --name web1 httpd
-docker run -dti -p 8085:80 --name web2 nginx
+docker run -dtiP --name web1 httpd # -P puerto alateario
+docker run -dti -p 8085:80 --name web2 nginx # -p puerto especifico
 iptables -t nat -L DOCKER -v -n
+docker port nombre-contenedor
+
+# Listar redes
+docker network ls [opciones]
+
+# Crear redes
+docker network create [opciones] nombre
+
+# Crear red con Rango Especificado
+docker network create --subnet 192.168.100.1/24 --ip-range 192.168.100.100/30 --gateway 192.168.100.100 produccion
+
+
+# Enlazar dos contenedore y persistiendo volúmenes:
+docker run -dti —name servidor_mysql -e MYSQL_ROOT_PASSWORD-000000 -v /bd:/var/lib/mysql mysql:5.7 
+docker run -dti —name servidor_wp -p 85:80 --link servidor_mysql:mysql wordpress:5.6.2-php7.3
+
+
+mkdir /web
+# Ejecutamos un contenedor utilizando un volumen con el directorio del servidor:
+docker run -dtiP --name centos6-prueba-web -v /web:/var/www/html docker.io/nickistre/centos-lamp 
+docker run -dtiP --name centos6-prueba-web2 -v /web:/var/www/html docker.io/nickistre/centos-lamp
+
+# Ejemplo crear un volumen con un nombre especifico: 
+docker volume create --name webapp
+docker volumne ls
+docker volume inspect webapp
+# "Mountpoint":   ”/var/lib/docker/volumes/webapp/_data",
+
+# Creamos un fichero desde el servidor Docker dentro del volumen:
+echo "prueba de volumen" > /var/lib/docker/volumes/webapp/_data/ejemplo.txt
+
+docker run -dtiP —name centos6-pruebacreacion2 -v webapp:/var/www/html docker.io/nickistre/centos-lamp
+
+# Docker-Compose
+
+
+docker-compose up
+docker-compose down
+♦♦Renombramos  docker-compose.yml-variables a docker-compose.yml

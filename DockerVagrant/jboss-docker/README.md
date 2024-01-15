@@ -16,3 +16,24 @@ En el proyecto se han utilizado los siguientes archivos que pasamos al contenedo
 ```sh
 docker build --rm -f Dockerfile -t jboss-lab .
 ```
+
+# Creamos el contenedor
+
+```sh
+docker run -dtiP --name jboss1 jboss-lab
+```
+
+Validamos que puerto nos asigno docker 
+
+El argumento -P se utiliza para publicar todos los puertos expuestos al azar en el host
+
+
+```sh
+docker logs jboss1
+```
+
+Consultamos con el password, puesto en el Dockerfile
+
+username: admin
+password: Admin#123
+
