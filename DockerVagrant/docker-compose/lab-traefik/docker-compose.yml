@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+   nginx:
+     image: nbrown/nginxhello
+     restart: always
+     labels:
+       - "traefik.enable=true"
+       - "traefik.backend=intranet"
+       - "traefik.frontend.rule=Host:intranet.curso.local"
+       - "traefik.docker.network=traefik"
+     networks:
+      - traefik
+
+networks:
+  traefik:
+    external:
+      name: traefik
