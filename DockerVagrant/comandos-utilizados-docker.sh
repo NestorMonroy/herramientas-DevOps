@@ -89,7 +89,6 @@ docker run -dtiP —name centos6-pruebacreacion2 -v webapp:/var/www/html docker.
 
 # Docker-Compose
 
-
-docker-compose up
-docker-compose down
-♦♦Renombramos  docker-compose.yml-variables a docker-compose.yml
+docker compose up
+docker compose down
+docker compose logs [nombre-contenedor]
