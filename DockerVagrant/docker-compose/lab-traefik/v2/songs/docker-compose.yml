@@ -8,7 +8,7 @@ services:
       - traefik
     labels:
       - "traefik.http.routers.songs-api.rule=Host(`songs.localhost`)"
-      - "traefik.http.services.songs-api.loadbalancer.server.port=1234"
+      - "traefik.http.services.songs-api.loadbalancer.server.port=9865"
 
 networks:
   traefik:

@@ -11,5 +11,12 @@ Iniciar
 docker compose up -d
 ```
 
-
+Consultar la ruta
 http://whoami.localhost/
+
+Ejecutamos el servicio de books 
+
+```sh
+cd books
+docker compose up -d --build
+```
