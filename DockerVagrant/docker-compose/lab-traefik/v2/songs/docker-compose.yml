@@ -5,11 +5,11 @@ services:
     build:
       context: .
     networks:
-      - traefik-net
+      - traefik
     labels:
       - "traefik.http.routers.songs-api.rule=Host(`songs.localhost`)"
       - "traefik.http.services.songs-api.loadbalancer.server.port=1234"
 
 networks:
-  traefik-net:
+  traefik:
     external: true
