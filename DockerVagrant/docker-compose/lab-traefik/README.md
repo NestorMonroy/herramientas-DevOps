@@ -11,3 +11,15 @@ Ejecutar el traefik
 ```sh
 docker run -d -p 8080:8080 -p 80:80 --network traefik --name traefik -v $PWD/traefik.toml:/etc/traefik/traefik.toml -v /var/run/docker.sock:/var/run/docker.sock traefik:1.7
 ```
+
+```sh
+docker compose up -d
+```
+
+Se escala el servicio compose
+
+```sh
+docker compose down
+
+docker compose up -d --scale nginx=3
+```
