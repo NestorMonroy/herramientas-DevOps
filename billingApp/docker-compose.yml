@@ -47,9 +47,18 @@ services:
   billingapp-front:
     build:
       context: ./dist 
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: 250M
+        # Recursos dedicados, mantiene los recursos disponibles del host para el contenedor
+        reservations:
+          cpus: "0.1"
+          memory: 128M
     container_name: billingApp-front
     depends_on:
       - billingapp-back
-#rango de puertos para escalar    
+    # rango de puertos para escalar    
     ports:
       - 80:80
