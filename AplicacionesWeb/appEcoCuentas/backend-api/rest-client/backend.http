@@ -1,0 +1,3 @@
+### GET request api clientes
+GET {{host}}/clientes
+Accept: application/json
