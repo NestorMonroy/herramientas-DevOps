@@ -1,28 +1,46 @@
 #!/bin/bash
 
-# Define el nombre de usuario para el cual instalar NVM y Node.js
+# Definir el directorio NVM
+NVM_DIR="/home/vagrant/.nvm"
 
-# Función para instalar NVM y Node.js
-install_nvm_node() {
-  # Instalar NVM (Node Version Manager)
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# Descargar e instalar NVM
+echo "Instalando NVM..."
+resultado=$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash 2>&1)
+echo "Resultado de la instalación de NVM:"
+echo "$resultado"
 
-  # Cargar NVM
-  export NVM_DIR="/usr/local/nvm"
-  [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
-  [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"
+# Exportar la variable NVM_DIR y cargar NVM
+export NVM_DIR
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  . "$NVM_DIR/nvm.sh"  # This loads nvm
+else
+  echo "El script nvm.sh no se encontró. Asegúrese de que NVM se haya instalado correctamente."
+  exit 1
+fi
 
-  # Instalar la última versión de Node.js
-  nvm install node
+# Instalar una versión específica de Node.js y establecerla como la predeterminada
+echo "Instalando Node.js versión 20.11.1..."
+resultado2=$(nvm install 20.11.1 2>&1)
+echo "Resultado de la instalación de Node.js:"
+echo "$resultado2"
 
-  # Establecer la versión instalada como la versión por defecto
-  nvm alias default node
+# Establecer la versión de Node.js como la predeterminada
+echo "Estableciendo la versión predeterminada de Node.js a 20.11.1..."
+resultado3=$(nvm alias default 20.11.1 2>&1)
+echo "Resultado de establecer la versión predeterminada de Node.js:"
+echo "$resultado3"
 
-  # Verificar la instalación
-  echo "Node.js version:"
-  node -v
-  echo "npm version:"
-  npm -v
-}
+echo "cache clean"
+resultado4=$(npm cache clean --force 2>&1)
+echo "Resultado de la cache clean"
+echo "$resultado4"
 
-install_nvm_node
+# Instalar Angular CLI
+echo "Instalando Angular CLI"
+resultado5=$(npm install -g @angular/cli 2>&1)
+echo "Resultado de la instalación de angular"
+echo "$resultado5"
+
+# Cambiar al directorio del usuario vagrant
+cd /vagrant/app/ || exit
+npm install
