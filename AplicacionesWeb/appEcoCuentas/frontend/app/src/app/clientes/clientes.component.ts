@@ -6,7 +6,9 @@ import {ClienteService} from "./cliente.service";
 @Component({
   selector: 'app-clientes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './clientes.component.html',
 })
 export class ClientesComponent implements OnInit{

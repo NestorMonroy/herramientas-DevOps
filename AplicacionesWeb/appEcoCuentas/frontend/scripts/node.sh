@@ -42,5 +42,6 @@ echo "Resultado de la instalación de angular"
 echo "$resultado5"
 
 # Cambiar al directorio del usuario vagrant
+echo "Instalando dependencias"
 cd /vagrant/app/ || exit
 npm install

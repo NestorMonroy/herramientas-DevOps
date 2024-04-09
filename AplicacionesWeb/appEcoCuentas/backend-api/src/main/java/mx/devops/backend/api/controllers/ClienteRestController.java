@@ -22,5 +22,4 @@ public class ClienteRestController {
         return clienteService.findAll();
     };
 
-
 }
