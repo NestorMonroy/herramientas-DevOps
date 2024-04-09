@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink  } from '@angular/router';
 import {Cliente} from "./cliente";
 import {ClienteService} from "./cliente.service";
 
@@ -8,6 +9,7 @@ import {ClienteService} from "./cliente.service";
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink
   ],
   templateUrl: './clientes.component.html',
 })

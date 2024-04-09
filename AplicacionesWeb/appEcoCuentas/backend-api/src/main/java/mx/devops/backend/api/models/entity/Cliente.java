@@ -15,6 +15,11 @@ public class Cliente implements Serializable {
     private String nombre;
     private String apellido;
     private String email;
+
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
     @Column(name="create_at")
     @Temporal(TemporalType.DATE)
     private Date createAt;

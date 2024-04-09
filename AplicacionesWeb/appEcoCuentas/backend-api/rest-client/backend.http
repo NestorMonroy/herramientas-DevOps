@@ -1,3 +1,30 @@
 ### GET request api clientes
 GET {{host}}/clientes
 Accept: application/json
+
+### GET request cliente {id}
+GET {{host}}/clientes/2
+Accept: application/json
+
+### Send POST request with json body
+POST {{host}}/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Hola",
+  "apellido": "otro",
+  "email": "jperez@yahoo.com"
+}
+
+### Send PUT request with json body
+PUT {{host}}/clientes/2
+Content-Type: application/json
+
+{
+  "nombre": "actualiza",
+  "apellido": "actualiza",
+  "email": "actualiza@yahoo.com"
+}
+
+### Send DELETE request with id
+DELETE {{host}}/cliente/2
