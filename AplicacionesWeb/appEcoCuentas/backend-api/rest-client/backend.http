@@ -27,4 +27,4 @@ Content-Type: application/json
 }
 
 ### Send DELETE request with id
-DELETE {{host}}/cliente/2
+DELETE {{host}}/clientes/2
