@@ -1,6 +1,8 @@
 package mx.devops.backend.api.models.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,8 +14,16 @@ public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty(message = "no puede ser vació")
+    @Column(nullable = false)
     private String nombre;
+
     private String apellido;
+
+    @NotEmpty(message = "no puede ser vació")
+    @Email(message="no es una dirección valida")
+    @Column(nullable = false, unique = true)
     private String email;
 
 	@PrePersist

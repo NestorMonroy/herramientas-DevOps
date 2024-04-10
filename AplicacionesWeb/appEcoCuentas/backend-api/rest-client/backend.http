@@ -6,6 +6,10 @@ Accept: application/json
 GET {{host}}/clientes/2
 Accept: application/json
 
+### GET request cliente {id} no existe
+GET {{host}}/clientes/100
+Accept: application/json
+
 ### Send POST request with json body
 POST {{host}}/clientes
 Content-Type: application/json
@@ -13,7 +17,7 @@ Content-Type: application/json
 {
   "nombre": "Hola",
   "apellido": "otro",
-  "email": "jperez@yahoo.com"
+  "email": "jperez1@yahoo.com"
 }
 
 ### Send PUT request with json body
@@ -23,7 +27,7 @@ Content-Type: application/json
 {
   "nombre": "actualiza",
   "apellido": "actualiza",
-  "email": "actualiza@yahoo.com"
+  "email": "jperez1@yahoo.com"
 }
 
 ### Send DELETE request with id
