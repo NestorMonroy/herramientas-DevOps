@@ -49,9 +49,10 @@ export class FormComponent {
 
   update():void {
     this.clienteService.update(this.cliente)
-      .subscribe(cliente => {
+      .subscribe(json => {
         this.router.navigate(['/clientes'])
-        Swal.fire('Cliente Actualizado', `${cliente.nombre}`, 'success')
+        //console.log(json);
+        Swal.fire('Cliente Actualizado',`${json.mensaje} : ${json.cliente.nombre} `, 'success')
       }
       )
   };
