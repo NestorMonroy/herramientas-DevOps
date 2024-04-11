@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm  } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2'
 import {Cliente} from "./cliente";
@@ -38,13 +38,15 @@ export class FormComponent {
     })
   }
 
-  public create(): void {
-    this.clienteService.create(this.cliente)
-      .subscribe(cliente => {
-        this.router.navigate(['/clientes'])
-        Swal.fire('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success')
-      }
-    )
+  public create(f: NgForm ): void {
+    if(f.form.valid){
+      this.clienteService.create(this.cliente)
+        .subscribe(cliente => {
+          this.router.navigate(['/clientes'])
+          Swal.fire('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success')
+        }
+      )
+    }
   };
 
   update():void {
