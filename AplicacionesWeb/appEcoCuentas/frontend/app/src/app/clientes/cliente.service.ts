@@ -21,7 +21,17 @@ export class ClienteService {
 
   getClientes(): Observable<Cliente[]> {
     return this.http.get(this.urlEndPoint).pipe(
-      map((response) => response as Cliente[])
+      map(response => {
+        let clientes = response as Cliente[];
+        return clientes.map(cliente => {
+          cliente.nombre = cliente.nombre.toUpperCase();
+          //let datePipe = new DatePipe('es-MX')
+          //let datePipe = new DatePipe('mx')
+          //cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyy')
+          //cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyy', 'es-MX')
+          return cliente;
+        })
+      })
     )
   }
 
