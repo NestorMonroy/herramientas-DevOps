@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { tap } from 'rxjs';
-import { RouterLink  } from '@angular/router';
+
 import Swal from 'sweetalert2'
 
 import {Cliente} from "./cliente";
 import {ClienteService} from "./cliente.service";
+import {PaginatorComponent} from "../paginator/paginator.component";
 
 @Component({
   selector: 'app-clientes',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink
+    RouterLink,
+    PaginatorComponent
   ],
   templateUrl: './clientes.component.html',
 })
 export class ClientesComponent implements OnInit{
 
   clientes: Cliente[];
+  paginador: any;
 
   constructor(
     private clienteService: ClienteService,
@@ -41,7 +44,10 @@ export class ClientesComponent implements OnInit{
               });
           })
         ).subscribe(
-        response => this.clientes = response.content as Cliente[]
+        response => {
+          this.clientes = response.content as Cliente[];
+          this.paginador = response;
+        }
       );
     })
   }
