@@ -19,7 +19,7 @@ import {ClienteService} from "./cliente.service";
 export class FormComponent implements OnInit{
   public cliente: Cliente = new Cliente();
   public titulo: string = "Crear cliente";
-  public errores: string[] = [];
+  public errores: string[];
 
   constructor(
     private clienteService: ClienteService,
@@ -59,11 +59,27 @@ export class FormComponent implements OnInit{
       .subscribe({
         next: (json) => {
           this.router.navigate(['/clientes'])
-          Swal.fire('Cliente Actualizado', `${json.mensaje} : ${json.cliente.nombre} `, 'success')
+          Swal.fire('Cliente Actualizado', `${json.tipo} : ${json.cliente.nombre} `, 'success')
         },
-        error: (err) =>  {
-          this.errores = err.error.errors ? (err.error.errors as string[]) : [];
-          console.error('Código de error desde backend: ' + err.status + ' | MSG = ' + JSON.stringify(err.error.errors));
+        error: (err: any) =>  {
+          if (err.status === 400 && err.error && Array.isArray(err.error.errors)) {
+
+            this.errores = err.error.errors.map((error: any) => error.defaultMessage);
+            //console.log( JSON.stringify(this.errores)  )
+            //console.log( err.error.errors as string[]  )
+            Swal.fire('Errores de validación', this.errores.join(', '), 'error');
+          } else {
+            let mensajeError = 'Error al actualizar cliente';
+            let detalleError = 'No se proporcionó más información';
+
+            if (err.error && err.error.tipo) {
+              mensajeError = err.error.tipo;
+            }
+            if (err.error && err.error.detalle) {
+              detalleError += ': ' + err.error.detalle;
+            }
+            Swal.fire(mensajeError, detalleError, 'error');
+          }
         }
       });
   };

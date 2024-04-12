@@ -32,37 +32,19 @@ export class ClienteService {
       {headers: this.httpHeaders}
     ).pipe(
       map((response : any) => response.cliente as Cliente),
-      catchError(e => {
-        let mensajeError = 'Error al crear cliente';
-        if (e.error instanceof ErrorEvent) {
-          // A client-side or network error occurred.
-          mensajeError = e.error.message;
-        } else {
-          // The backend returned an unsuccessful response code.
-          if (e.error && typeof e.error === 'object') {
-            console.log(JSON.stringify(e))
-            mensajeError = JSON.stringify(e.error.errors);
-            // err.error.errors ? (err.error.errors as string[]) : [];
-          }
-        }
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: mensajeError
-        });
-        return throwError(() => e);
-      })
+      catchError(this.handleError)
     )
   }
+
   getCliente(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
         this.router.navigate(['/clientes'])
-        console.log(e.error.mensaje)
+        console.log(e.error.detalle)
         Swal.fire({
           icon: "error",
           title: "Error al editar",
-          text: e.error.mensaje,
+          text: e.error.detalle,
         });
         return throwError(() => e)
       })
@@ -74,43 +56,40 @@ export class ClienteService {
       cliente,
       {headers: this.httpHeaders}
     ).pipe(
-      catchError(e => {
-          let mensajeError = 'Error al actualizar cliente';
-          if (e.error instanceof ErrorEvent) {
-            // A client-side or network error occurred.
-            mensajeError = e.error.message;
-          } else {
-            // The backend returned an unsuccessful response code.
-            if (e.error && typeof e.error === 'object') {
-              mensajeError = JSON.stringify(e.error.errors);
-            }
-          }
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: mensajeError
-          });
-          return throwError(() => e);
-        }
-      )
+      catchError(this.handleError)
     )
   }
   delete(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(
       `${this.urlEndPoint}/${id}`,
     ).pipe(
-      catchError(e => {
-        console.log(e.error.mensaje)
-        console.log(e.error.error)
-        Swal.fire({
-          icon: "error",
-          title: e.error.mensaje,
-          text: e.error.error,
-        });
-        return throwError(() => e)
-      })
+      catchError(this.handleError)
     )
 
   }
-}
 
+  private handleError(e: any): Observable<never> {
+    let mensajeError = 'Error no especificado';
+    let detalleError = 'No se proporcionó más información';
+
+    if (e.error instanceof ErrorEvent) {
+      // A client-side or network error occurred.
+      mensajeError = e.error.message;
+    } else {
+      // The backend returned an unsuccessful response code.
+      if (e.error && e.error.tipo) {
+        mensajeError = e.error.tipo;
+      }
+      if (e.error && e.error.detalle) {
+        detalleError = e.error.detalle;
+      }
+    }
+    Swal.fire({
+      icon: 'error',
+      title: mensajeError,
+      text: detalleError
+    });
+
+    return throwError(() => e);
+  }
+}
