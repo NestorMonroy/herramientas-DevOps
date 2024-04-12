@@ -6,13 +6,36 @@ import Swal from 'sweetalert2'
 import {Cliente} from "./cliente";
 import {ClienteService} from "./cliente.service";
 
+import{MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+// Formato personalizado para la fecha
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY', // Aquí defines el formato de visualización deseado
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-form',
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatInputModule,
+    MatDatepickerModule,
+  ],
+  providers: [
+    // Moment can be provided globally to your app by adding `provideMomentDateAdapter`
+    // to your app config. We provide it at the component level here, due to limitations
+    // of our example generation script.
+    provideMomentDateAdapter(MY_DATE_FORMATS),
   ],
   templateUrl: './form.component.html',
 })

@@ -3,6 +3,7 @@ package mx.devops.backend.api.models.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
@@ -36,6 +37,11 @@ public class Cliente implements Serializable {
     @Column(name="create_at")
     @Temporal(TemporalType.DATE)
     private Date createAt;
+
+    @Column(name="fecha_nacimiento")
+    @Temporal(TemporalType.DATE)
+    @NotNull(message = "no puede ser vació")
+    private Date fechaNacimiento;
 
     public Long getId() {
         return id;
@@ -77,8 +83,14 @@ public class Cliente implements Serializable {
         this.createAt = createAt;
     }
 
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     @Serial
     private static final long serialVersionUID = 8096018828451384687L;
-
 
 }
