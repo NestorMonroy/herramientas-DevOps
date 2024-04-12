@@ -2,6 +2,10 @@
 GET {{host}}/clientes
 Accept: application/json
 
+### GET request api clientes page
+GET {{host}}/clientes/page/3
+Accept: application/json
+
 ### GET request cliente {id}
 GET {{host}}/clientes/2
 Accept: application/json

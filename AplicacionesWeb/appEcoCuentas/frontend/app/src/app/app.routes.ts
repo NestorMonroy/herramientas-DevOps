@@ -5,6 +5,7 @@ import {FormComponent} from "./clientes/form.component";
 
 export const routes: Routes = [
   { path: 'clientes', component: ClientesComponent },
+  { path: 'clientes/page/:page', component: ClientesComponent },
   { path: 'directivas', component: DirectivaComponent },
   { path: 'clientes/form', component: FormComponent },
   { path: 'clientes/form/:id', component: FormComponent },
