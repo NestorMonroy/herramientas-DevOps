@@ -36,3 +36,21 @@ Content-Type: application/json
 
 ### Send DELETE request with id
 DELETE {{host}}/clientes/2
+
+
+### Send a form with the text and file png
+POST {{host}}/clientes/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="id"
+Content-Type: text/plain
+
+2
+--WebAppBoundary
+Content-Disposition: form-data; name="archivo"; filename="avatar_unknow.png"
+//Content-Type: image/png
+Content-Type: image/*
+
+< C:\Users\nesto\Desktop\imagen\avatar_unknow.png
+--WebAppBoundary--

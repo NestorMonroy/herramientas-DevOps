@@ -33,8 +33,6 @@ export const MY_DATE_FORMATS = {
   ],
   providers: [
     // Moment can be provided globally to your app by adding `provideMomentDateAdapter`
-    // to your app config. We provide it at the component level here, due to limitations
-    // of our example generation script.
     provideMomentDateAdapter(MY_DATE_FORMATS),
   ],
   templateUrl: './form.component.html',

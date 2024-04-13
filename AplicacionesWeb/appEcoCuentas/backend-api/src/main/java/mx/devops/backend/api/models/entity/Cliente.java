@@ -43,6 +43,8 @@ public class Cliente implements Serializable {
     @NotNull(message = "no puede ser vació")
     private Date fechaNacimiento;
 
+    private String foto;
+
     public Long getId() {
         return id;
     }
@@ -88,6 +90,14 @@ public class Cliente implements Serializable {
     }
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 
     @Serial
