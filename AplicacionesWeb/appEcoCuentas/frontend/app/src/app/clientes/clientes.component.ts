@@ -15,7 +15,7 @@ import {PaginatorComponent} from "../paginator/paginator.component";
   imports: [
     CommonModule,
     RouterLink,
-    PaginatorComponent
+    PaginatorComponent,
   ],
   templateUrl: './clientes.component.html',
 })

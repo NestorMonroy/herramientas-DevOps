@@ -5,4 +5,5 @@ export class Cliente {
   email:string;
   createAt:string;
   fechaNacimiento:string;
+  foto:string;
 }
