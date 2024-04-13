@@ -54,3 +54,8 @@ Content-Type: image/*
 
 < C:\Users\nesto\Desktop\imagen\avatar_unknow.png
 --WebAppBoundary--
+
+### GET request api uploads
+GET {{host}}/uploads/img/50fb6c3a-4b66-4b06-9153-d1b1f9f29f70_avatar_unknow.png
+Accept: application/json
+
