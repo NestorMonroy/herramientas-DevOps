@@ -8,6 +8,8 @@ import Swal from 'sweetalert2'
 import {Cliente} from "./cliente";
 import {ClienteService} from "./cliente.service";
 import {PaginatorComponent} from "../paginator/paginator.component";
+import {DetalleComponent} from "./detalle/detalle.component";
+
 
 @Component({
   selector: 'app-clientes',
@@ -16,6 +18,7 @@ import {PaginatorComponent} from "../paginator/paginator.component";
     CommonModule,
     RouterLink,
     PaginatorComponent,
+    DetalleComponent
   ],
   templateUrl: './clientes.component.html',
 })
@@ -23,6 +26,7 @@ export class ClientesComponent implements OnInit{
 
   clientes: Cliente[];
   paginador: any;
+  clienteSeleccionado: Cliente;
 
   constructor(
     private clienteService: ClienteService,
@@ -88,8 +92,12 @@ export class ClientesComponent implements OnInit{
             )
           }
         )
-
       }
     })
   }
+
+  abrirModal(cliente: Cliente) {
+    this.clienteSeleccionado = cliente;
+  }
+
 }
