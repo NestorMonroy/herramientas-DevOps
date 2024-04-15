@@ -79,6 +79,8 @@ export class FormComponent implements OnInit{
     this.clienteService.update(this.cliente)
       .subscribe({
         next: (json) => {
+          //console.log(this.titulo)
+          //this.titulo = "Editar cliente";
           this.router.navigate(['/clientes'])
           Swal.fire('Cliente Actualizado', `${json.tipo} : ${json.cliente.nombre} `, 'success')
         },

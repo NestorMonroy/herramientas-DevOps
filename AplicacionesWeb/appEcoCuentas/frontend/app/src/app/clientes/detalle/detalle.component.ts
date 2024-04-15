@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import Swal from 'sweetalert2'
 
@@ -25,7 +24,6 @@ export class DetalleComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private activatedRouter: ActivatedRoute,
     public modalService: ModalService,
   ){}
 
@@ -52,7 +50,7 @@ export class DetalleComponent {
           }else if(event.type === HttpEventType.Response){
             let response: any = event.body;
             this.cliente = response.cliente as Cliente;
-
+            this.modalService.notificarUpload.emit(this.cliente);
             Swal.fire("La foto se ha subido completamente!", `La foto se ha subido con éxito: ${this.cliente.foto}`, 'success')
           }
         });

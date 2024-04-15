@@ -9,6 +9,7 @@ import {Cliente} from "./cliente";
 import {ClienteService} from "./cliente.service";
 import {PaginatorComponent} from "../paginator/paginator.component";
 import {DetalleComponent} from "./detalle/detalle.component";
+import {ModalService} from "./detalle/modal.service";
 
 
 @Component({
@@ -31,9 +32,11 @@ export class ClientesComponent implements OnInit{
   constructor(
     private clienteService: ClienteService,
     private activatedRouter: ActivatedRoute,
+    private modalService: ModalService,
   ) {}
 
   ngOnInit() {
+
     this.activatedRouter.paramMap.subscribe(params => {
       let page: number = +params.get('page');
       if (!page) {page = 0}
@@ -47,13 +50,22 @@ export class ClientesComponent implements OnInit{
                 console.log(cliente.nombre)
               });
           })
-        ).subscribe(
-        response => {
+        ).subscribe(response => {
           this.clientes = response.content as Cliente[];
           this.paginador = response;
         }
       );
     })
+
+    this.modalService.notificarUpload.subscribe(cliente => {
+      this.clientes = this.clientes.map(clienteOriginal => {
+        if(cliente.id == clienteOriginal.id){
+          clienteOriginal.foto = cliente.foto;
+        }
+        return clienteOriginal;
+      })
+    })
+
   }
 
   delete(cliente: Cliente): void {
@@ -98,6 +110,7 @@ export class ClientesComponent implements OnInit{
 
   abrirModal(cliente: Cliente) {
     this.clienteSeleccionado = cliente;
+    this.modalService.abrirModal();
   }
 
 }
