@@ -10,6 +10,7 @@ import {ClienteService} from "./cliente.service";
 import {PaginatorComponent} from "../paginator/paginator.component";
 import {DetalleComponent} from "./detalle/detalle.component";
 import {ModalService} from "./detalle/modal.service";
+import {URL_BACKEND} from "../config/config";
 
 
 @Component({
@@ -28,11 +29,12 @@ export class ClientesComponent implements OnInit{
   clientes: Cliente[];
   paginador: any;
   clienteSeleccionado: Cliente;
+  urlBackend: string = URL_BACKEND;
 
   constructor(
     private clienteService: ClienteService,
     private activatedRouter: ActivatedRoute,
-    private modalService: ModalService,
+    public modalService: ModalService,
   ) {}
 
   ngOnInit() {
