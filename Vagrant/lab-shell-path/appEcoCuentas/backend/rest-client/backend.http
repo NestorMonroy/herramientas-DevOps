@@ -1,0 +1,60 @@
+### GET request api clientes
+GET {{host}}/clientes
+Accept: application/json
+
+### GET request api clientes page
+GET {{host}}/clientes/page/3
+Accept: application/json
+
+### GET request cliente {id}
+GET {{host}}/clientes/2
+Accept: application/json
+
+### GET request cliente {id} no existe
+GET {{host}}/clientes/100
+Accept: application/json
+
+### Send POST request with json body
+POST {{host}}/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Hola",
+  "apellido": "otro",
+  "email": "jperez1@yahoo.com"
+}
+
+### Send PUT request with json body
+PUT {{host}}/clientes/2
+Content-Type: application/json
+
+{
+  "nombre": "actualiza",
+  "apellido": "actualiza",
+  "email": "jperez1@yahoo.com"
+}
+
+### Send DELETE request with id
+DELETE {{host}}/clientes/2
+
+
+### Send a form with the text and file png
+POST {{host}}/clientes/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="id"
+Content-Type: text/plain
+
+2
+--WebAppBoundary
+Content-Disposition: form-data; name="archivo"; filename="avatar_unknow.png"
+//Content-Type: image/png
+Content-Type: image/*
+
+< C:\Users\nesto\Desktop\imagen\avatar_unknow.png
+--WebAppBoundary--
+
+### GET request api uploads
+GET {{host}}/uploads/img/50fb6c3a-4b66-4b06-9153-d1b1f9f29f70_avatar_unknow.png
+Accept: application/json

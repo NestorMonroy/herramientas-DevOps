@@ -3,8 +3,35 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    depends_on:
+      - mysql_db
     ports:
-      - "8081:8081"
+      - "8081:8080"
+    networks:
+      - ecoCuenta
+
+  mysql_db:
+    container_name: mysql
+    image: mysql:8.2.0
+    restart: always
+    ports:
+      - "5432:3306"
+    environment:
+      MYSQL_USER: backendapp
+      MYSQL_PASSWORD: qwerty
+      MYSQL_ROOT_PASSWORD: rootbackendapp
+      MYSQL_DATABASE: db_backend
+    networks:
+      - ecoCuenta
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    depends_on:
+      - mysql_db
+    ports:
+      - "9090:8080"
     networks:
       - ecoCuenta
 
