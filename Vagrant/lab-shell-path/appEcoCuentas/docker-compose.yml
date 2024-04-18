@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - ecoCuenta
+
+networks:
+  ecoCuenta:
+    driver: bridge
