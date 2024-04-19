@@ -1,29 +1,33 @@
 # Etapa de construcción
-FROM node:18-alpine as build
+FROM node:20.12.2-alpine as build-stage
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
 # Copia los archivos de dependencias
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-# Instala las dependencias de Node
-RUN npm install
+# Instalar dependencias utilizando cache de npm para mejorar la velocidad de construcción
+RUN npm ci
+
+# Configurar un tiempo de espera más largo para npm
+#RUN npm config set fetch-retry-maxtimeout 120000
 
 # Copia los archivos restantes de tu proyecto Angular
 COPY . .
 
 # Construye la aplicación Angular para producción
-RUN npm run build --prod
+RUN npm run start
+#RUN npm run build:production
 
 # Etapa de ejecución
-FROM nginx:alpine
-
-# Copia los archivos de distribución de Angular al servidor Nginx
-COPY --from=build /app/dist/mi-aplicacion-angular /usr/share/nginx/html
-
-# Expone el puerto en el que se servirá la aplicación Angular
-EXPOSE 80
-
-# Inicia Nginx cuando se ejecute el contenedor
-CMD ["nginx", "-g", "daemon off;"]
+#FROM nginx:alpine as production-stage
+#
+## Copia los archivos de distribución de Angular al servidor Nginx
+#COPY --from=build-stage /app/dist/frontend /usr/share/nginx/html
+#
+## Expone el puerto en el que se servirá la aplicación Angular
+#EXPOSE 80
+#
+## Inicia Nginx cuando se ejecute el contenedor
+#CMD ["nginx", "-g", "daemon off;"]

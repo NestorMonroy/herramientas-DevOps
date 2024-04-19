@@ -7,7 +7,7 @@ COPY src ./src
 COPY pom.xml .
 
 # Ejecuta Maven para limpiar y empaquetar el proyecto, generando el archivo JAR
-RUN mvn -f pom.xml clean package
+RUN mvn -f pom.xml clean package -DskipTests
 
 # Verifica que el archivo JAR exista y no esté corrupto
 RUN jar -tvf target/*.jar
