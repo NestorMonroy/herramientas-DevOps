@@ -23,3 +23,4 @@ fi
 
 #docker build -t nombre_de_la_imagen [opciones y parametros] .
 #docker build -t appecocuentas-frontend --no-cache .
+#docker compose -p ecocuentas-app --compatibility up -d --build
