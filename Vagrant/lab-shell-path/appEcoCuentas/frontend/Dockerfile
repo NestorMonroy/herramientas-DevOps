@@ -1,46 +1,37 @@
-# Etapa de construcción
-FROM node:20-bullseye-slim as build-stage
-# Establece el directorio de trabajo
+# Etapa de construcción de dependencias
+FROM node:20-bullseye-slim AS dependencies
 WORKDIR /app
 
-# Copia los archivos de dependencias
+# Copia solo los archivos package.json y package-lock.json
 COPY package*.json ./
 
-# error ETIMEDOUT
-# Configuración de DNS en Docker consultar script docker-DNS.sh
-# Asegúrate de que npm no esté configurado para usar uno. Puedes eliminar cualquier configuración de proxy con2:
-# RUN npm config delete proxy
-# RUN npm config delete https-proxy
+# Instala las dependencias, esto solo se ejecutará si los archivos package.json o package-lock.json han cambiado
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm ci
 
-# Ejecute el siguiente comando para volver al registro predeterminado
-# RUN npm config set registry https://registry.npmjs.org/
+# Utiliza un volumen para el directorio /tmp para mejorar el rendimiento
+VOLUME /tmpfront
 
-# Limpiar la Caché de npm: Ejecuta antes de npm ci para asegurarte de que no haya datos corruptos en la caché que puedan estar causando el problema.
-# RUN npm cache clean --force
+# Etapa de construcción de la aplicación
+FROM node:20-bullseye-slim AS build-stage
+WORKDIR /app
 
-# Habilita logs más detallados para obtener más información sobre dónde se está atascando el proceso.
-#RUN npm ci --verbose
-# Se ejecuta para establecer el tamaño máximo del heap en 4 GB
-# RUN node --max-old-space-size=4096 $(which npm) install
-# RUN npm install --max-old-space-size=512 --no-warnings
-# Instalar dependencias utilizando cache de npm para mejorar la velocidad de construcción
-RUN npm ci
-
-# Copia los archivos restantes de tu proyecto Angular
+# Copia las dependencias instaladas previamente
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
-# Construye la aplicación Angular para producción
-#RUN npm run start
+# Construye la aplicación para producción
 RUN npm run build:production
 
 # Etapa de ejecución
-FROM nginx:alpine as production-stage
+FROM nginx:alpine AS production-stage
+WORKDIR /usr/share/nginx/html
 
-# Copia los archivos de distribución de Angular al servidor Nginx
-COPY --from=build-stage /app/dist/frontend /usr/share/nginx/html
+# Copia los archivos de distribución desde la etapa de construcción
+COPY --from=build-stage /app/dist/frontend .
 
-# Expone el puerto en el que se servirá la aplicación Angular
+# Expone el puerto 80 para el servidor web
 EXPOSE 80
 
-# Inicia Nginx cuando se ejecute el contenedor
+# Comando para ejecutar el servidor web Nginx
 CMD ["nginx", "-g", "daemon off;"]
