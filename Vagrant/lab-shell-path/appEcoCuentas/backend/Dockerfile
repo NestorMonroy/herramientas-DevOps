@@ -1,27 +1,39 @@
-# Utiliza una imagen base de Maven para construir el proyecto
+# Etapa de construcción de dependencias
 FROM maven:3.8.4-eclipse-temurin-17 AS build
 WORKDIR /app-backend
 
-# Copia el archivo pom.xml y descarga las dependencias para aprovechar la caché de Docker
+# Aprovecha la caché de capas de Docker para las dependencias
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn dependency:resolve
 
 # Copia el código fuente del proyecto
 COPY src ./src
 
-# Ejecuta Maven para limpiar y empaquetar el proyecto, generando el archivo JAR
-RUN mvn -f pom.xml clean package -DskipTests
+# Compila y empaqueta la aplicación sin ejecutar pruebas
+RUN mvn clean package -DskipTests
 
-# Verifica que el archivo JAR exista y no esté corrupto
-RUN jar -tvf target/*.jar
-
-# Utiliza una imagen base de Java para ejecutar la aplicación
+# Etapa de ejecución
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app-backend
 
-# Copia el archivo JAR desde la etapa de construcción a la etapa de ejecución
+# Crear un grupo y usuario no root para ejecutar la aplicación
+RUN addgroup -g 1028 devops \
+    && adduser -D -G devops -u 1029 admin
+
+# Crea un punto de montaje para usar el volumen para /tmp
+VOLUME /tmpback
+
+# Copia el JAR desde la etapa de construcción
 COPY --from=build /app-backend/target/*.jar app.jar
 
-# Expone el puerto 8081 y configura el punto de entrada para ejecutar la aplicación
+# Cambia la propiedad del JAR al usuario no root 'admin'
+RUN chown admin:devops app.jar
+
+# Cambia al usuario 'admin' para ejecutar la aplicación
+USER admin
+
+# Expone el puerto que utiliza la aplicación
 EXPOSE 8081
-ENTRYPOINT ["java","-jar","app.jar"]
+
+# Define el punto de entrada de la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]

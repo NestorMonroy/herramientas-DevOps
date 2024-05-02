@@ -5,9 +5,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/db_backend?useSSL=false&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=backendapp
-      - SPRING_DATASOURCE_PASSWORD=qwerty
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/db_backend?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: backendapp
+      SPRING_DATASOURCE_PASSWORD: qwerty
+    image: ecocuentas-backend:1.0.0
     depends_on:
       - db
     ports:
@@ -46,12 +47,28 @@ services:
       dockerfile: Dockerfile
     environment:
       - URL_BACKEND=http://backend:8080
+    volumes:
+      - node_modules:/app/node_modules
+    image: ecocuentas-frontend:1.0.0
+    cpu_shares: 2048
+    deploy:
+      resources:
+        limits:
+          cpus: "0.15"
+          memory: 512M # 250M
+        # Recursos dedicados, mantiene los recursos disponibles del host para el contenedor
+        reservations:
+          cpus: "0.1"
+          memory: 250M # 128M
     depends_on:
       - backend
     ports:
       - "80:80"
     networks:
       - ecoCuenta
+
+volumes:
+  node_modules:
 
 networks:
   ecoCuenta:
