@@ -73,7 +73,8 @@ restart_and_verify_docker() {
 }
 
 # Nombre de tu usuario.
-user="vagrant"
+# user="vagrant"
+user=${USER}
 
 # Ejecuta las funciones definidas.
 update_upgrade_packages
@@ -81,6 +82,7 @@ install_dependencies
 setup_docker_repository
 install_docker
 configure_docker_group "$user"
+# newgrp docker
 restart_and_verify_docker
 
 # Imprime un mensaje de éxito.
