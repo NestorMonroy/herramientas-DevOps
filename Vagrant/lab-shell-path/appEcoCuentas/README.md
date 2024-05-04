@@ -1,83 +1,113 @@
+# Instrucciones de Configuración del Proyecto
 
-## Iniciar vagrant
+Este documento proporciona una guía paso a paso para configurar y utilizar las herramientas necesarias para este proyecto de desarrollo.
 
-```sh
-vagrant up 
+## Configuración de SSH-Agent en Windows
+
+Para configurar el servicio SSH-Agent para que se inicie automáticamente con PowerShell, ejecuta el siguiente comando:
+
+```powershell
+Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
 ```
 
-### Si tienes problemas
+## Uso de Vagrant
 
-Inicia vagrant y guarda el log en un archivo llamado file.log, para ver más detalle
+Vagrant es una herramienta para construir y gestionar entornos de máquinas virtuales de manera sencilla.
+
+### Iniciar Vagrant
+
+Para arrancar la máquina virtual, ejecuta:
+
+```sh
+vagrant up
+```
+
+### Solución de Problemas
+
+Si encuentras problemas al iniciar Vagrant, guarda el log en un archivo para un análisis más detallado:
 
 ```sh
 vagrant up --debug *> file.log
 ```
 
-### error ETIMEDOUT
+### Verificar el Estado de la Máquina Virtual
 
-#### Elimina cualquier configuración de proxy
-
-Asegúrate de que npm no esté configurado para usar uno.
+Para verificar el estado actual de la máquina virtual, utiliza:
 
 ```sh
-npm config delete https-proxy
-npm config delete proxy
+vagrant status
+vagrant global-status
 ```
 
-#### Configura el registro de npm al valor predeterminado
+### Conexión a la Máquina Virtual
 
-- Esto indica a npm que descargue los paquetes desde el registro oficial de npm. 
-- Este registro es una base de datos pública de paquetes de JavaScript que son accesibles para ser instalados mediante el comando npm install.
-- Es útil cuando tienes problemas para instalar paquetes y sospechas que puede ser debido a un problema con el registro configurado actualmente.
+Puedes conectarte a la máquina virtual utilizando SSH
 
 ```sh
-npm config set registry https://registry.npmjs.org/
+# Conexión vía SSH
+vagrant ssh
+
+vagrant port
+
+# Direcciones de conexión
+127.0.0.1:2222
+localhost:2222
 ```
 
-#### Limpiar la caché de npm
+### Detener la Máquina Virtual
 
-Para asegurarte de que no haya datos corruptos que puedan estar causando problemas. 
-
--  Es una buena práctica ejecutarlo antes de `npm ci` para garantizar que cualquier dato corrupto en la caché no afecte la instalación de las dependencias. 
+Para detener la máquina virtual, usa:
 
 ```sh
-npm cache clean --force
+vagrant halt
 ```
 
-> Si estás utilizando Docker y dependes de su sistema de caché para optimizar la construcción de tus imágenes, debes tener en cuenta que limpiar la caché de npm podría no ser necesario o incluso contraproducente. Docker puede utilizar su propia caché de capas para acelerar la construcción de imágenes, y ejecutar npm cache clean --force podría invalidar esta caché, lo que resultaría en tiempos de construcción más largos.
+### Suspender y Reanudar la Máquina Virtual
 
-
-#### Habilita logs
-
-Para habilitar logs más detallados en npm y obtener más información sobre el proceso de instalación. Esto te proporcionará una salida más detallada en la consola, lo que puede ser útil para diagnosticar problemas.
+Para suspender la máquina virtual al disco y reanudarla después, ejecuta:
 
 ```sh
-npm ci --verbose
+# Suspender
+vagrant suspend
+
+# Reanudar
+vagrant up
+# o
+vagrant resume
 ```
 
-- Al ejecutar npm ci con la opción --verbose, npm imprimirá información adicional sobre cada paso del proceso de instalación. 
-- Esto incluye detalles sobre la descarga de paquetes, la extracción de archivos, y más. 
-- Si el proceso se está atascando en algún punto, los logs detallados pueden ayudarte a identificar exactamente dónde y por qué está ocurriendo.
+### Actualizar y Eliminar Boxes
 
-#### Establece el tamaño máximo del heap de Node.js
-
-Es útil si estás experimentando errores de memoria insuficiente durante la instalación de paquetes. Aquí, $(which npm) se utiliza para encontrar la ruta completa del ejecutable de npm en tu sistema y ejecutarlo con ese límite de memoria aumentado.
+Para comprobar si hay actualizaciones de boxes y actualizarlas:
 
 ```sh
-node --max-old-space-size=4096 $(which npm) install
+# Comprobar actualizaciones
+vagrant box outdated --global
+
+# Actualizar el box
+vagrant box update
 ```
 
-Este comando hace lo siguiente:
+Para eliminar boxes desactualizados:
 
-- `--max-old-space-size=4096`: Establece el tamaño máximo del heap de Node.js a 4096 MB (4 GB), lo que puede ser útil si tu proceso de Node.js requiere más memoria de la que se asigna por defecto.
-- `$(which npm)`: Encuentra la ruta del ejecutable de npm en tu sistema y la utiliza para ejecutar el comando install.
-`install`: Ejecuta npm install, que instalará las dependencias definidas en tu archivo package.json.
+```sh
+# Eliminar boxes desactualizados
+vagrant box prune
+```
 
+### Destruir la Máquina Virtual
 
-#### Configurar el DNS en Docker
+Para destruir la máquina virtual y su contenido:
 
-La configuración de DNS en Docker es una parte fundamental de la gestión de la red para contenedores, permitiéndoles operar eficientemente dentro de su ecosistema de red asignado.
+```sh
+vagrant destroy -f
+# Borrar la carpeta .vagrant en el proyecto
+rm -rf .vagrant
 
-Revisar [docker-DNS.sh](scripts%2Fdocker-DNS.sh)
+# Borrar el box del proyecto
+vagrant box remove centos/7 --box-version 1801.02
+# Ubicación de boxes en Windows
+C:\Users\example\.vagrant.d\boxes
+```
 
-
+Recuerda reemplazar`centos/7`y`1801.02`con el nombre y la versión de tu box específico.

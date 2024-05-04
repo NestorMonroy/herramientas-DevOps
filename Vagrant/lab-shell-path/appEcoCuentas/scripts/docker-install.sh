@@ -73,8 +73,8 @@ restart_and_verify_docker() {
 }
 
 # Nombre de tu usuario.
-# user="vagrant"
-user=${USER}
+user="vagrant"
+#user=${USER}
 
 # Ejecuta las funciones definidas.
 update_upgrade_packages

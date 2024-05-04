@@ -32,15 +32,17 @@ Para obtener más ayuda sobre Angular CLI, usa `ng help` o consulta la página d
 
 Al usar este comando puedes obtener más información sobre lo que está sucediendo durante el proceso de instalación
 
-```
+```sh
 npm install --verbose
 ```
 
 ### Error “JavaScript heap out of memory”
 
-Ocurre cuando Node.js excede el límite de memoria asignado para el heap de JavaScript (heap).. El heap es donde se almacenan los objetos y estructuras de datos dinámicos durante la ejecución de tu aplicación.
+Ocurre cuando Node.js excede el límite de memoria asignado para el heap de JavaScript (heap). El heap es donde se almacenan los objetos y estructuras de datos dinámicos durante la ejecución de tu aplicación.
 
-```
+`--max-old-space-size=4096`: Establece el tamaño máximo del heap de Node.js a 4096 MB (4 GB).
+
+```sh
 node --max-old-space-size=8192 $(which npm) install
 ```
 
@@ -48,10 +50,9 @@ node --max-old-space-size=8192 $(which npm) install
 
 Ocurre cuando se intenta ejecutar un comando que requiere un archivo de bloqueo (lockfile), como package-lock.json, y dicho archivo no existe en el proyecto
 
-
 Si no tienes el archivo `package-lock.json` , puedes crearlo sin instalar paquetes con el comando:
 
-``` 
+```sh
 npm i --package-lock-only
 ``` 
 
@@ -59,35 +60,56 @@ Una vez que tengas el archivo package-lock.json, puedes ejecutar `npm audit` par
 
 ### Limpieza de caché y resolución de vulnerabilidades
 
-npm almacena en caché los datos para evitar tener que descargar repetidamente paquetes. Sin embargo, la caché puede corromperse o desactualizarse.
+`npm` almacena en caché los datos para evitar tener que descargar repetidamente paquetes. Sin embargo, la caché puede corromperse o desactualizarse.
 
 
 #### Limpia la caché de npm
 
 Este comando elimina todos los datos almacenados en la caché de npm. Es útil cuando enfrentas problemas de instalación o conflictos de dependencias que pueden estar relacionados con datos de caché corruptos o desactualizados.
 
-```
+```sh
 npm cache clean --force
 ```
 
 Después de limpiar la caché, es recomendable verificar su integridad. Esto asegura que la caché esté en buen estado y no contenga datos corruptos que puedan causar problemas.
 
-```
+```sh
 npm cache verify
 ```
+
+> Si estás utilizando Docker y dependes de su sistema de caché para optimizar la construcción de tus imágenes, debes tener en cuenta que limpiar la caché de npm podría no ser necesario o incluso contraproducente. Docker puede utilizar su propia caché de capas para acelerar la construcción de imágenes, y ejecutar npm cache clean --force podría invalidar esta caché, lo que resultaría en tiempos de construcción más largos.
 
 ### npm audit
 
 Revisa tus dependencias en busca de vulnerabilidades conocidas
 
-```
+```sh
 npm audit
 ```
 
 Este comando intenta resolverlas automáticamente, aunque debes usarlo con precaución ya que puede introducir cambios incompatibles.
 
-```
+```sh
 npm audit fix 
+```
+
+#### Configura el registro de npm al valor predeterminado
+
+- Esto indica a npm que descargue los paquetes desde el registro oficial de npm.
+- Este registro es una base de datos pública de paquetes de JavaScript que son accesibles para ser instalados mediante el comando npm install.
+- Es útil cuando tienes problemas para instalar paquetes y sospechas que puede ser debido a un problema con el registro configurado actualmente.
+
+```sh
+npm config set registry https://registry.npmjs.org/
+```
+
+#### Elimina cualquier configuración de proxy
+
+Asegúrate de que npm no esté configurado para usar uno.
+
+```sh
+npm config delete https-proxy
+npm config delete proxy
 ```
 
 ### Manejo de Dependencias en Node.js
@@ -98,30 +120,27 @@ Para resolver problemas con las dependencias en `node_modules`:
 
 En npm versión 7 y posteriores, se intenta instalar automáticamente las dependencias entre pares (peer dependencies), y el proceso fallará si hay conflictos que no se pueden resolver. 
 
-```
+```sh
 npm config set legacy-peer-deps true
 ```
 
 Al establecer legacy-peer-deps en true, le indicas a npm que ignore estas dependencias entre pares y no intente resolverlas, lo cual puede ayudar a evitar errores de instalación cuando hay conflictos de versiones.
 
-
 Limpia y verifica la caché de npm
 
 #### Elimina node_modules y package-lock.json
 
-puedes eliminar la carpeta node_modules y el archivo package-lock.json para forzar una reinstalación limpia de todas las dependencias. Esto puede resolver conflictos y asegurar que todas las dependencias se instalen según las versiones especificadas en tu package.json.
+Puedes eliminar la carpeta node_modules y el archivo package-lock.json para forzar una reinstalación limpia de todas las dependencias. Esto puede resolver conflictos y asegurar que todas las dependencias se instalen según las versiones especificadas en tu package.json.
 
-```
+```sh
 rm -rf node_modules
 rm -f package-lock.json
 ```
 
-
-
 #### Utiliza npm list 
 
-para ver las dependencias instaladas y sus versiones. Esto te ayudará a identificar y resolver conflictos de versiones actualizando tu package.json o instalando las versiones correctas de los paquetes.
+Para ver las dependencias instaladas y sus versiones. Esto te ayudará a identificar y resolver conflictos de versiones actualizando tu package.json o instalando las versiones correctas de los paquetes.
 
-```
+```sh
 npm list
 ```
